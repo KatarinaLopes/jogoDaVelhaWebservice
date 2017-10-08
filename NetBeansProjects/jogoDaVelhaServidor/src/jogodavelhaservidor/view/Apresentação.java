@@ -30,6 +30,24 @@ public class Apresentação {
         this.entrada = entrada;
     }
 
+    public Scanner getS() {
+        return s;
+    }
+
+    public void setS(Scanner s) {
+        this.s = s;
+    }
+
+    public PrintStream getEntrada() {
+        return entrada;
+    }
+
+    public void setEntrada(PrintStream entrada) {
+        this.entrada = entrada;
+    }
+
+    
+    
     public void selecionarNome() {
         entrada.println("Nome do Jogador 1: \n#INIT_COMUNICATE");
         

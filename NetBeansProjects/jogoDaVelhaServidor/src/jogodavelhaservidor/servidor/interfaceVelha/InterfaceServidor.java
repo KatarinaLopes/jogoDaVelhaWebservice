@@ -19,6 +19,7 @@ import jogodavelhaservidor.view.Apresentação;
 public class InterfaceServidor {
     private Socket cliente1; 
     private Socket cliente2;
+    private Socket clienteAtual;
     private Apresentação apresentacao;
     
     private int conexoes;
@@ -73,14 +74,16 @@ public class InterfaceServidor {
                     + "Erro: " + ex);
         }
     }
-    
+        
     public void iniciarJogo() {
+        
         String msg = "";
         
         apresentacao.selecionarNome();
         apresentacao.selecionarSimbolo();
  
         while(!msg.equals("#END_COMUNICATE")){
+            
             msg = apresentacao.iniciarJogo();
         }
     }
@@ -90,6 +93,16 @@ public class InterfaceServidor {
             conectarCliente();
             
             conexoes++;
+        }
+        
+        clienteAtual = cliente1;
+    }
+    
+    public void chavearClienteAtual(){
+        if(clienteAtual == cliente1){
+            clienteAtual = cliente2;
+        }else{
+            clienteAtual = cliente1;
         }
     }
             
