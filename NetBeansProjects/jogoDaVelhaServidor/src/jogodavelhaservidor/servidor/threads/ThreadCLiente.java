@@ -8,6 +8,7 @@ package jogodavelhaservidor.servidor.threads;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jogodavelhaservidor.servidor.Servidor;
 import jogodavelhaservidor.view.Apresentação;
 
 /**
@@ -17,7 +18,7 @@ import jogodavelhaservidor.view.Apresentação;
 public class ThreadCLiente extends Thread{
     private Socket cliente;
     private Apresentação apresentacao;
-    private int signal;
+    private static int signal;
 
     public ThreadCLiente(Socket cliente, Apresentação apresentacao) {
         this.cliente = cliente;
@@ -32,12 +33,12 @@ public class ThreadCLiente extends Thread{
         this.cliente = cliente;
     }   
 
-    public int getSignal() {
+    public static int getSignal() {
         return signal;
     }
 
-    public void setSignal(int signal) {
-        this.signal = signal;
+    public static void setSignal(int sign) {
+        signal = sign;
     }
     
     @Override
@@ -45,9 +46,20 @@ public class ThreadCLiente extends Thread{
         apresentacao.selecionarNome();
         
         if(signal == 1){
+            //System.out.println(1);
             apresentacao.selecionarSimbolo();
         }else{
             apresentacao.anunciarSimboloOutroJogador();
         }
+        
+        Servidor.enviarDados("recebido");
+        
+    }
+    
+    public String jogar(){
+        
+        String msg = apresentacao.iniciarJogo();
+        
+        return msg;
     }
 }

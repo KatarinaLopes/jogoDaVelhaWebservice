@@ -63,13 +63,13 @@ public class InterfaceServidor {
 
             if (cliente1 == null) {
                 cliente1 = new ThreadCLiente(cliente, apresentacao);
-                cliente1.setSignal(1);
-                cliente1.start();
-            } else {
-                cliente2 = new ThreadCLiente(cliente, apresentacao);
+                ThreadCLiente.setSignal(1);
+                cliente1.run();
                 
-                cliente2.setSignal(2);
-                cliente2.start();
+            } else {               
+                cliente2 = new ThreadCLiente(cliente, apresentacao);
+                ThreadCLiente.setSignal(2);
+                cliente2.run();
             }
 
         } catch (IOException ex) {
@@ -90,44 +90,65 @@ public class InterfaceServidor {
         }*/
     }
 
-    public void iniciarJogo() {
-
+    public void iniciarJogo() throws IOException, InterruptedException {        
+        System.out.println("1");
+        
         String msg = "";
-
-        apresentacao.selecionarSimbolo();
-
+        
         while (!msg.equals("#END_COMUNICATE")) {
-
+            System.out.println("2");
+            
+            apresentacao.setEntrada(new PrintStream(clienteAtual.
+                    getCliente().getOutputStream()));
+            apresentacao.setS(new Scanner(clienteAtual.
+                    getCliente().getInputStream()));
+            
+            System.out.println("3");
+            
             msg = apresentacao.iniciarJogo();
+            chavearClientes();
         }
     }
 
-    public void tratarConexaoComCliente() throws InterruptedException {
+    public void tratarConexaoComCliente() throws InterruptedException, IOException {
+
         while (conexoes < 2) {
             conectarCliente();
 
             conexoes++;
+            
         }
-
+        
+        System.out.println(1);
         clienteAtual = cliente1;
+       
+        //cliente1.wait();
+        //clienteEmAguardo.notify();
     }
 
-    public void chavearClientes() {
+    public void chavearClientes() throws InterruptedException {
+        System.err.println("1");
         if (clienteAtual == cliente1) {
+            
+            System.err.println("2");
+            
             clienteAtual = cliente2;
             clienteEmAguardo = cliente1;
+            
         } else {
+            
+            System.err.println("3");
             clienteAtual = cliente1;
             clienteEmAguardo = cliente2;
         }
+       
     }
 
-    public static void main(String[] args) throws IOException, 
+    public static void main(String[] args) throws IOException,
             InterruptedException {
         InterfaceServidor interfaceServidor = new InterfaceServidor();
 
         interfaceServidor.tratarConexaoComCliente();
-        //interfaceServidor.iniciarJogo();
-        //interfaceServidor.desconectarCliente();
+        interfaceServidor.iniciarJogo();
     }
 }

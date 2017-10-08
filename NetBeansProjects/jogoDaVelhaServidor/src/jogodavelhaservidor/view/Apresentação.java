@@ -74,8 +74,8 @@ public class Apresentação {
         String simbolo1 = escolha == 1 ? "X" : "O";
         String simbolo2 = escolha == 2 ? "X" : "O";
         
-        entrada.println(controller.getJ2().getNome() + 
-                " ficou com " + simbolo2);
+        //entrada.println(controller.getJ2().getNome() + 
+          //      " ficou com " + simbolo2);
         
         controller.selecionarSimbolo(simbolo1, simbolo2);
     }
@@ -90,7 +90,7 @@ public class Apresentação {
         
         boolean co = controller.continuar();
         
-        while(controller.continuar() == true){
+        //while(controller.continuar() == true){
             
             entrada.println("Vez de " + controller.
                     imprimirNomeJogadorAtual());
@@ -111,7 +111,7 @@ public class Apresentação {
             }
             
             
-        }
+        //}
         
         return "";
     }
