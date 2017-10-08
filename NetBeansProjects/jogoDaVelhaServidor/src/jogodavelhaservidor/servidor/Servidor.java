@@ -55,7 +55,7 @@ public class Servidor {
         System.out.println("Servidor desconectado");
     }
 
-    public static void conectarCliente() throws IOException {
+    public static Socket conectarCliente() throws IOException {
         cliente = server.accept();
 
         entrada = new PrintStream(cliente.getOutputStream());
@@ -63,6 +63,8 @@ public class Servidor {
 
         System.out.println("Cliente " + cliente.getInetAddress()
                 + " conectado");
+        
+        return cliente;
     }
 
     public static void enviarDados(String msg) {

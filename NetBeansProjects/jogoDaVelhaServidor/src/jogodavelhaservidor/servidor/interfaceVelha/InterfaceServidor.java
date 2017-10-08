@@ -17,8 +17,11 @@ import jogodavelhaservidor.view.Apresentação;
  * @author Katarina
  */
 public class InterfaceServidor {
-    private Socket cliente; 
+    private Socket cliente1; 
+    private Socket cliente2;
     private Apresentação apresentacao;
+    
+    private int conexoes;
     
     public InterfaceServidor(){
         try {
@@ -28,9 +31,7 @@ public class InterfaceServidor {
                     + "Tente novamente.\n"
                     + "Erro: " + ex);
         }
-        
-        
-        
+           
     }
     
     public void encerrarConexao(){
@@ -45,9 +46,16 @@ public class InterfaceServidor {
     
     public void conectarCliente(){
         try {
-            Servidor.conectarCliente();
-            apresentacao = new Apresentação(Servidor.getSaida(), 
-                    Servidor.getEntrada());
+            Socket cliente = Servidor.conectarCliente();
+            //apresentacao = new Apresentação(Servidor.getSaida(), 
+              //      Servidor.getEntrada());
+            
+            if(cliente1 == null){
+                cliente1 = cliente;
+            }else{
+                cliente2 = cliente;
+            }
+            
         } catch (IOException ex) {
             System.out.println("Falha ao conectar o cliente. "
                     + "Tente novamente.\n"
@@ -57,9 +65,10 @@ public class InterfaceServidor {
     
     public void desconectarCliente(){
         try {
-            Servidor.desconectarCliente();
+            cliente1.close();
+            cliente2.close();
         } catch (IOException ex) {
-            System.out.println("Falha ao desconectar o cliente. "
+            System.out.println("Falha ao desconectar os clientes. "
                     + "Tente novamente.\n"
                     + "Erro: " + ex);
         }
@@ -75,12 +84,20 @@ public class InterfaceServidor {
             msg = apresentacao.iniciarJogo();
         }
     }
+    
+    public void tratarConexaoComCliente(){
+        while(conexoes < 2){
+            conectarCliente();
+            
+            conexoes++;
+        }
+    }
             
     public static void main(String[] args) throws IOException {
         InterfaceServidor interfaceServidor = new InterfaceServidor();
         
-        interfaceServidor.conectarCliente();
-        interfaceServidor.iniciarJogo();
+        interfaceServidor.tratarConexaoComCliente();
+        //interfaceServidor.iniciarJogo();
         interfaceServidor.desconectarCliente();
     }
 }
