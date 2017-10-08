@@ -6,8 +6,10 @@
 package jogodavelhaservidor.servidor;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,73 +18,107 @@ import java.util.logging.Logger;
  * @author Katarina
  */
 public class Servidor {
+
     private static ServerSocket server;
     private static Socket cliente;
-    
-    private Servidor(){
-        
+    private static PrintStream entrada;
+    private static Scanner saida;
+
+    private Servidor() {
+
     }
 
     public static ServerSocket getServer() {
         return server;
     }
 
-    public static void setServer(ServerSocket server) {
-        Servidor.server = server;
+    public static Socket getCliente() {
+        return cliente;
     }
-    
-    public static void conectarServidor(int porta) throws IOException{
+
+    public static PrintStream getEntrada() {
+        return entrada;
+    }
+
+    public static Scanner getSaida() {
+        return saida;
+    }
+
+    public static void conectarServidor(int porta) throws IOException {
         server = new ServerSocket(porta);
         System.out.println("Servidor conectado");
     }
-    
-    public static void desconectarServidor() throws IOException{
+
+    public static void desconectarServidor() throws IOException {
         server.close();
         System.out.println("Servidor desconectado");
     }
-    
-    public static void conectarCliente() throws IOException{
+
+    public static void conectarCliente() throws IOException {
         cliente = server.accept();
-        
-        System.out.println("Cliente " + cliente.getInetAddress() + 
-                " conectado");
+
+        entrada = new PrintStream(cliente.getOutputStream());
+        saida = new Scanner(cliente.getInputStream());
+
+        System.out.println("Cliente " + cliente.getInetAddress()
+                + " conectado");
     }
-    
-    public static void desconectarCliente() throws IOException{
+
+    public static void enviarDados(String msg) {
+        entrada.println(msg);
+    }
+
+    public static String receberDados() {
+        return saida.next();
+    }
+
+    public static void desconectarCliente() throws IOException {
+        saida.close();
+        entrada.close();
         cliente.close();
         System.out.println("Cliente desconectado");
     }
-    
+
     public static void main(String[] args) {
         try {
             Servidor.conectarServidor(12345);
         } catch (IOException ex) {
             System.out.println("Impossível conectar servidor. "
                     + "Tente novamente.");
-            
+
             return;
-            
+
         }
-        
+
         try {
             Servidor.conectarCliente();
         } catch (IOException ex) {
             System.out.println("Impossível conectar cliente. "
                     + "Tente novamente.");
         }
-        
-        try {
-            Servidor.desconectarCliente();
-        } catch (IOException ex) {
-            System.out.println("Falha ao desconectar cliente.");
+
+        while (Servidor.getSaida().hasNextLine()) {
+            String msg = Servidor.receberDados();
+
+            System.out.println(msg);
+
+            if (msg.equals("quit")) {
+
+                try {
+                    Servidor.desconectarCliente();
+                    break;
+                } catch (IOException ex) {
+                    System.out.println("Falha ao desconectar cliente."
+                            + " Tente novamente");
+                }
+            }
         }
-        
+
         try {
             Servidor.desconectarServidor();
         } catch (IOException ex) {
             System.out.println("Falha ao desconectar servidor.");
         }
     }
-    
-    
+
 }
