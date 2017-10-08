@@ -80,22 +80,6 @@ public class Servidor {
     }
 
     public static void main(String[] args) {
-        try {
-            Servidor.conectarServidor(12345);
-        } catch (IOException ex) {
-            System.out.println("Impossível conectar servidor. "
-                    + "Tente novamente.");
-
-            return;
-
-        }
-
-        try {
-            Servidor.conectarCliente();
-        } catch (IOException ex) {
-            System.out.println("Impossível conectar cliente. "
-                    + "Tente novamente.");
-        }
 
         while (Servidor.getSaida().hasNextLine()) {
             String msg = Servidor.receberDados();
@@ -112,12 +96,6 @@ public class Servidor {
                             + " Tente novamente");
                 }
             }
-        }
-
-        try {
-            Servidor.desconectarServidor();
-        } catch (IOException ex) {
-            System.out.println("Falha ao desconectar servidor.");
         }
     }
 
