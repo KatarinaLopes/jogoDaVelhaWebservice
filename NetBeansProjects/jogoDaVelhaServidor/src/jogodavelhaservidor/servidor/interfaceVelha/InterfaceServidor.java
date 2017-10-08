@@ -65,8 +65,8 @@ public class InterfaceServidor {
     
     public void desconectarCliente(){
         try {
-            cliente1.close();
-            cliente2.close();
+            Servidor.desconectarCliente(cliente1);
+            Servidor.desconectarCliente(cliente2);
         } catch (IOException ex) {
             System.out.println("Falha ao desconectar os clientes. "
                     + "Tente novamente.\n"

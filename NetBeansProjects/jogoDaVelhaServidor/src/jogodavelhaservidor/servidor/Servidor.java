@@ -75,11 +75,10 @@ public class Servidor {
         return saida.next();
     }
 
-    public static void desconectarCliente() throws IOException {
-        saida.close();
-        entrada.close();
+    public static void desconectarCliente(Socket cliente) throws IOException {
         cliente.close();
-        System.out.println("Cliente desconectado");
+        System.out.println("Cliente " + cliente.getInetAddress()+ 
+                " desconectado");
     }
 
     public static void main(String[] args) {
