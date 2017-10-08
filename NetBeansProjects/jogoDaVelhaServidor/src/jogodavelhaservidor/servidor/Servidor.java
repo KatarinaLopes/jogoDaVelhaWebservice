@@ -23,6 +23,7 @@ public class Servidor {
     private static Socket cliente;
     private static PrintStream entrada;
     private static Scanner saida;
+    
 
     private Servidor() {
 
@@ -81,22 +82,7 @@ public class Servidor {
 
     public static void main(String[] args) {
 
-        while (Servidor.getSaida().hasNextLine()) {
-            String msg = Servidor.receberDados();
-
-            System.out.println(msg);
-
-            if (msg.equals("quit")) {
-
-                try {
-                    Servidor.desconectarCliente();
-                    break;
-                } catch (IOException ex) {
-                    System.out.println("Falha ao desconectar cliente."
-                            + " Tente novamente");
-                }
-            }
-        }
+        
     }
 
 }

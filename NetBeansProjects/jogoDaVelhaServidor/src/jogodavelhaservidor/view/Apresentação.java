@@ -6,8 +6,11 @@
 package jogodavelhaservidor.view;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import jogodavelhaservidor.controllers.ControllerJogo;
 
@@ -18,27 +21,33 @@ import jogodavelhaservidor.controllers.ControllerJogo;
 public class Apresentação {
 
     private ControllerJogo controller = new ControllerJogo();
-    private Scanner s = new Scanner(System.in);
+    private Scanner s;
     
-    public Apresentação() throws IOException{
+    private PrintStream entrada;
+    
+    public Apresentação(Scanner s, PrintStream entrada) {
+        this.s = s;
+        this.entrada = entrada;
     }
 
-    public void selecionarNome() throws IOException {
-        System.out.println("Nome do Jogador 1:");
+    public void selecionarNome() {
+        entrada.println("Nome do Jogador 1: \n#INIT_COMUNICATE");
         
         String nomeJ1 = s.next();
         
         //Servidor.getSaidaCliente().close(); 
         
-        System.out.println("Nome do Jogador 2:");
+        entrada.println("Nome do Jogador 2: \n#INIT_COMUNICATE");
         
         String nomeJ2 = s.next();
 
         controller.selecionarNome(nomeJ1, nomeJ2);
+        
     }
 
     public void selecionarSimbolo() {
-        System.out.println("Jogador 1, escolha 1 para X ou 2 para O");
+        entrada.println("Jogador 1, escolha 1 para X ou 2 para O "
+                + "\n#INIT_COMUNICATE");
 
         int escolha = 0;
 
@@ -55,25 +64,26 @@ public class Apresentação {
         String simbolo1 = escolha == 1 ? "X" : "O";
         String simbolo2 = escolha == 2 ? "X" : "O";
         
-        System.out.println(controller.getJ2().getNome() + 
+        entrada.println(controller.getJ2().getNome() + 
                 " ficou com " + simbolo2);
         
         controller.selecionarSimbolo(simbolo1, simbolo2);
     }
     
-    public void iniciarJogo() throws IOException{
-        System.out.println("Início!!!");
+    public String iniciarJogo(){
+        entrada.println("Início!!!");
         
         boolean co = controller.continuar();
         
         while(controller.continuar() == true){
             
-            System.out.println("Vez de " + controller.
+            entrada.println("Vez de " + controller.
                     imprimirNomeJogadorAtual());
             
             //controller.executar(Integer.parseInt(Servidor.pegarSaida()));
             
-            System.out.println(controller.imprimirTabuleiro());
+            entrada.println(controller.imprimirTabuleiro() + 
+                    "\n#INIT_COMUNICATE");
             
             
             
@@ -81,12 +91,14 @@ public class Apresentação {
                     executar(s.nextInt());
             
             if(msg != null){
-                System.out.println(msg);
-                return;
+                entrada.println(msg);
+                return "#END_COMUNICATE";
             }
             
             
         }
+        
+        return "";
     }
     
     public void jogar() throws IOException{
@@ -96,9 +108,6 @@ public class Apresentação {
         iniciarJogo();
     }
 
-    public static void main(String[] args) throws IOException {
-        Apresentação a = new Apresentação();
-
-        a.jogar();
+    public static void main(String[] args) {
     }
 }

@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jogodavelhaservidor.servidor.Servidor;
+import jogodavelhaservidor.view.Apresentação;
 
 /**
  *
@@ -17,6 +18,7 @@ import jogodavelhaservidor.servidor.Servidor;
  */
 public class InterfaceServidor {
     private Socket cliente; 
+    private Apresentação apresentacao;
     
     public InterfaceServidor(){
         try {
@@ -26,6 +28,8 @@ public class InterfaceServidor {
                     + "Tente novamente.\n"
                     + "Erro: " + ex);
         }
+        
+        
         
     }
     
@@ -42,6 +46,8 @@ public class InterfaceServidor {
     public void conectarCliente(){
         try {
             Servidor.conectarCliente();
+            apresentacao = new Apresentação(Servidor.getSaida(), 
+                    Servidor.getEntrada());
         } catch (IOException ex) {
             System.out.println("Falha ao conectar o cliente. "
                     + "Tente novamente.\n"
@@ -59,10 +65,22 @@ public class InterfaceServidor {
         }
     }
     
-    public static void main(String[] args) {
+    public void iniciarJogo() {
+        String msg = "";
+        
+        apresentacao.selecionarNome();
+        apresentacao.selecionarSimbolo();
+ 
+        while(!msg.equals("#END_COMUNICATE")){
+            msg = apresentacao.iniciarJogo();
+        }
+    }
+            
+    public static void main(String[] args) throws IOException {
         InterfaceServidor interfaceServidor = new InterfaceServidor();
         
         interfaceServidor.conectarCliente();
+        interfaceServidor.iniciarJogo();
         interfaceServidor.desconectarCliente();
     }
 }
