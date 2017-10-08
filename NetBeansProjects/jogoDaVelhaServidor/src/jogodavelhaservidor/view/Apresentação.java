@@ -25,9 +25,7 @@ public class Apresentação {
     
     private PrintStream entrada;
     
-    public Apresentação(Scanner s, PrintStream entrada) {
-        this.s = s;
-        this.entrada = entrada;
+    public Apresentação() {
     }
 
     public Scanner getS() {
@@ -45,21 +43,15 @@ public class Apresentação {
     public void setEntrada(PrintStream entrada) {
         this.entrada = entrada;
     }
-
-    
-    
+   
     public void selecionarNome() {
-        entrada.println("Nome do Jogador 1: \n#INIT_COMUNICATE");
+        entrada.println("Nome do Jogador: \n#INIT_COMUNICATE");
         
         String nomeJ1 = s.next();
         
-        //Servidor.getSaidaCliente().close(); 
+        //Servidor.getSaidaCliente().close();
         
-        entrada.println("Nome do Jogador 2: \n#INIT_COMUNICATE");
-        
-        String nomeJ2 = s.next();
-
-        controller.selecionarNome(nomeJ1, nomeJ2);
+        controller.selecionarNome(nomeJ1);
         
     }
 

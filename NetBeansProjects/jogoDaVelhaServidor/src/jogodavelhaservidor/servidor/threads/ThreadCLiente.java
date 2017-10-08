@@ -6,6 +6,7 @@
 package jogodavelhaservidor.servidor.threads;
 
 import java.net.Socket;
+import jogodavelhaservidor.view.Apresentação;
 
 /**
  *
@@ -13,9 +14,11 @@ import java.net.Socket;
  */
 public class ThreadCLiente extends Thread{
     private Socket cliente;
+    private Apresentação apresentacao;
 
-    public ThreadCLiente(Socket cliente) {
+    public ThreadCLiente(Socket cliente, Apresentação apresentacao) {
         this.cliente = cliente;
+        this.apresentacao = apresentacao;
     }
 
     public Socket getCliente() {
@@ -24,12 +27,10 @@ public class ThreadCLiente extends Thread{
 
     public void setCliente(Socket cliente) {
         this.cliente = cliente;
-    }
-    
-    
+    }   
     
     @Override
     public void run(){
-        System.out.println(1+1);
+        apresentacao.selecionarNome();
     }
 }
