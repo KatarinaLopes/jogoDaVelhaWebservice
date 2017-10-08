@@ -64,12 +64,17 @@ public class InterfaceServidor {
             if (cliente1 == null) {
                 cliente1 = new ThreadCLiente(cliente, apresentacao);
                 ThreadCLiente.setSignal(1);
-                cliente1.run();
+                cliente1.start();
                 
-            } else {               
+            } else { 
                 cliente2 = new ThreadCLiente(cliente, apresentacao);
                 ThreadCLiente.setSignal(2);
-                cliente2.run();
+                cliente1.interrupt();
+                cliente2.start();
+                
+                synchronized(cliente2){
+                    cliente2.wait();
+                }
             }
 
         } catch (IOException ex) {
@@ -91,21 +96,12 @@ public class InterfaceServidor {
     }
 
     public void iniciarJogo() throws IOException, InterruptedException {        
-        System.out.println("1");
         
         String msg = "";
         
         while (!msg.equals("#END_COMUNICATE")) {
-            System.out.println("2");
             
-            apresentacao.setEntrada(new PrintStream(clienteAtual.
-                    getCliente().getOutputStream()));
-            apresentacao.setS(new Scanner(clienteAtual.
-                    getCliente().getInputStream()));
-            
-            System.out.println("3");
-            
-            msg = apresentacao.iniciarJogo();
+            msg = clienteAtual.jogar();
             chavearClientes();
         }
     }
@@ -114,30 +110,28 @@ public class InterfaceServidor {
 
         while (conexoes < 2) {
             conectarCliente();
+            
+           // rodarThreads();
 
             conexoes++;
             
         }
         
-        System.out.println(1);
+        //rodarThreads();
         clienteAtual = cliente1;
+        clienteEmAguardo = cliente2;
        
         //cliente1.wait();
         //clienteEmAguardo.notify();
     }
 
     public void chavearClientes() throws InterruptedException {
-        System.err.println("1");
+       
         if (clienteAtual == cliente1) {
-            
-            System.err.println("2");
-            
             clienteAtual = cliente2;
             clienteEmAguardo = cliente1;
             
         } else {
-            
-            System.err.println("3");
             clienteAtual = cliente1;
             clienteEmAguardo = cliente2;
         }
@@ -149,6 +143,7 @@ public class InterfaceServidor {
         InterfaceServidor interfaceServidor = new InterfaceServidor();
 
         interfaceServidor.tratarConexaoComCliente();
+        //interfaceServidor.rodarThreads();
         interfaceServidor.iniciarJogo();
     }
 }

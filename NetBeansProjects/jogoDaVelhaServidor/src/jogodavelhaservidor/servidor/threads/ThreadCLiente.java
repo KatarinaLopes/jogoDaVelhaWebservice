@@ -45,15 +45,13 @@ public class ThreadCLiente extends Thread{
     public void run(){
         apresentacao.selecionarNome();
         
-        if(signal == 1){
-            //System.out.println(1);
+        synchronized(this){
             apresentacao.selecionarSimbolo();
-        }else{
-            apresentacao.anunciarSimboloOutroJogador();
+            notify();
         }
         
-        Servidor.enviarDados("recebido");
-        
+        apresentacao.anunciarSimboloOutroJogador();
+            
     }
     
     public String jogar(){
