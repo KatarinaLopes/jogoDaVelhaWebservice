@@ -79,6 +79,11 @@ public class Apresentação {
         
         controller.selecionarSimbolo(simbolo1, simbolo2);
     }
+
+    public void anunciarSimboloOutroJogador(){
+        entrada.println("Você ficou com o símbolo " + 
+                controller.getJ2().getSimbolo());
+    }
     
     public String iniciarJogo(){
         entrada.println("Início!!!");

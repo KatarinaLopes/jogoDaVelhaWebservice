@@ -24,6 +24,7 @@ public class InterfaceServidor {
     private ThreadCLiente cliente1;
     private ThreadCLiente cliente2;
     private ThreadCLiente clienteAtual;
+    private ThreadCLiente clienteEmAguardo;
     private Apresentação apresentacao;
 
     private int conexoes;
@@ -50,7 +51,7 @@ public class InterfaceServidor {
         }
     }
 
-    public void conectarCliente() {
+    public void conectarCliente() throws InterruptedException {
         try {
             Socket cliente = Servidor.conectarCliente();
             //apresentacao = new Apresentação(Servidor.getSaida(), 
@@ -62,11 +63,12 @@ public class InterfaceServidor {
 
             if (cliente1 == null) {
                 cliente1 = new ThreadCLiente(cliente, apresentacao);
-
+                cliente1.setSignal(1);
                 cliente1.start();
             } else {
                 cliente2 = new ThreadCLiente(cliente, apresentacao);
-
+                
+                cliente2.setSignal(2);
                 cliente2.start();
             }
 
@@ -92,7 +94,6 @@ public class InterfaceServidor {
 
         String msg = "";
 
-        apresentacao.selecionarNome();
         apresentacao.selecionarSimbolo();
 
         while (!msg.equals("#END_COMUNICATE")) {
@@ -101,7 +102,7 @@ public class InterfaceServidor {
         }
     }
 
-    public void tratarConexaoComCliente() {
+    public void tratarConexaoComCliente() throws InterruptedException {
         while (conexoes < 2) {
             conectarCliente();
 
@@ -111,15 +112,18 @@ public class InterfaceServidor {
         clienteAtual = cliente1;
     }
 
-    public void chavearClienteAtual() {
+    public void chavearClientes() {
         if (clienteAtual == cliente1) {
             clienteAtual = cliente2;
+            clienteEmAguardo = cliente1;
         } else {
             clienteAtual = cliente1;
+            clienteEmAguardo = cliente2;
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, 
+            InterruptedException {
         InterfaceServidor interfaceServidor = new InterfaceServidor();
 
         interfaceServidor.tratarConexaoComCliente();
