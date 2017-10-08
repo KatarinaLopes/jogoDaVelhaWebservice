@@ -15,39 +15,36 @@ import jogodavelhaservidor.controllers.ControllerJogo;
  *
  * @author Katarina
  */
-public class Apresentação1 {
+public class Apresentação {
 
     private ControllerJogo controller = new ControllerJogo();
     private Scanner s = new Scanner(System.in);
     
-    /*public Apresentação1() throws IOException{
-        Servidor.conectarServidor(12345);
-        Servidor.conectarCliente();
+    public Apresentação() throws IOException{
     }
 
     public void selecionarNome() throws IOException {
-        Servidor.imprimirSaida("Nome do Jogador 1: \n#INIT_COMUNICATE");
+        System.out.println("Nome do Jogador 1:");
         
-        String nomeJ1 = Servidor.pegarSaida();
+        String nomeJ1 = s.next();
         
         //Servidor.getSaidaCliente().close(); 
         
-        Servidor.imprimirSaida("Nome do Jogador 2: \n#INIT_COMUNICATE");
+        System.out.println("Nome do Jogador 2:");
         
-        String nomeJ2 = Servidor.pegarSaida();
+        String nomeJ2 = s.next();
 
-        //controller.selecionarNomeJogadores(nomeJ1, nomeJ2);
+        controller.selecionarNome(nomeJ1, nomeJ2);
     }
 
     public void selecionarSimbolo() {
-        Servidor.imprimirSaida("Jogador 1, escolha 1 para X ou 2 para O"
-                + "\n#INIT_COMUNICATE");
+        System.out.println("Jogador 1, escolha 1 para X ou 2 para O");
 
         int escolha = 0;
 
         do {
 
-            escolha = Integer.parseInt(Servidor.pegarSaida());
+            escolha = s.nextInt();
 
             if (escolha != 1 && escolha != 2) {
                 System.out.println("Escolha 1 ou 2!");
@@ -58,36 +55,34 @@ public class Apresentação1 {
         String simbolo1 = escolha == 1 ? "X" : "O";
         String simbolo2 = escolha == 2 ? "X" : "O";
         
-        Servidor.imprimirSaida(controller.getJ2().getNome() + 
+        System.out.println(controller.getJ2().getNome() + 
                 " ficou com " + simbolo2);
         
-        controller.selecionarSimboloJogador1(simbolo1, simbolo2);
+        controller.selecionarSimbolo(simbolo1, simbolo2);
     }
     
     public void iniciarJogo() throws IOException{
-        Servidor.imprimirSaida("Início!!!");
+        System.out.println("Início!!!");
         
         boolean co = controller.continuar();
         
         while(controller.continuar() == true){
             
-            Servidor.imprimirSaida("Vez de " + controller.
+            System.out.println("Vez de " + controller.
                     imprimirNomeJogadorAtual());
             
             //controller.executar(Integer.parseInt(Servidor.pegarSaida()));
             
-            Servidor.imprimirSaida(controller.imprimirTabuleiro());
+            System.out.println(controller.imprimirTabuleiro());
             
-            
-            Servidor.imprimirSaida("#INIT_COMUNICATE");
             
             
             String msg = controller.
-                    executar(Integer.parseInt(Servidor.pegarSaida()));
+                    executar(s.nextInt());
             
             if(msg != null){
-                Servidor.imprimirSaida(msg);
-                Servidor.desconectarCliente();
+                System.out.println(msg);
+                return;
             }
             
             
@@ -102,9 +97,8 @@ public class Apresentação1 {
     }
 
     public static void main(String[] args) throws IOException {
-        Apresentação1 a = new Apresentação1();
+        Apresentação a = new Apresentação();
 
         a.jogar();
     }
-    */
 }

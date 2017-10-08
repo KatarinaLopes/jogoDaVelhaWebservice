@@ -40,12 +40,9 @@ public class ControllerJogo {
     }
         
     
-    public void selecionarNome(String nome){
-        if(J1.getNome() == null){
-            J1.setNome(nome);
-        }else{
-            j2.setNome(nome);
-        }
+    public void selecionarNome(String nome1, String nome2){
+        J1.setNome(nome1);
+        j2.setNome(nome2);
     }
     
     public void selecionarSimbolo(String simbolo1, String simbolo2){
