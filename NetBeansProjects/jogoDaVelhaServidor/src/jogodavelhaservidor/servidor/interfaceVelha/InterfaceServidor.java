@@ -61,21 +61,11 @@ public class InterfaceServidor {
                     cliente.getOutputStream()));
             apresentacao.setS(new Scanner(cliente.getInputStream()));
 
-            if (cliente1 == null) {
-                cliente1 = new ThreadCLiente(cliente, apresentacao);
-                ThreadCLiente.setSignal(1);
-                cliente1.start();
-                
-            } else { 
-                cliente2 = new ThreadCLiente(cliente, apresentacao);
-                ThreadCLiente.setSignal(2);
-                cliente1.interrupt();
-                cliente2.start();
-                
-                synchronized(cliente2){
-                    cliente2.wait();
-                }
-            }
+            clienteAtual = new ThreadCLiente(cliente, apresentacao);
+
+            apropriarCliente();
+
+            clienteAtual.start();
 
         } catch (IOException ex) {
             System.out.println("Falha ao conectar o cliente. "
@@ -95,47 +85,88 @@ public class InterfaceServidor {
         }*/
     }
 
-    public void iniciarJogo() throws IOException, InterruptedException {        
-        
-        String msg = "";
-        
-        while (!msg.equals("#END_COMUNICATE")) {
-            
-            msg = clienteAtual.jogar();
-            chavearClientes();
+    public String iniciarJogo() throws IOException, InterruptedException {
+        synchronized (clienteAtual) {
+
+            System.out.println(clienteAtual + " " + clienteEmAguardo);
+
+            String msg = "";
+
+            while (!msg.equals("#END_COMUNICATE")) {
+
+                apresentacao.setEntrada(new PrintStream(
+                        clienteAtual.getCliente().getOutputStream()));
+                apresentacao.setS(new Scanner(
+                        clienteAtual.getCliente().getInputStream()));
+
+                msg = apresentacao.iniciarJogo();
+
+                if (msg.equals("#NEXT_PLAYER")) {
+                    chavearClientes();
+                }
+
+            }
+            notify();
+            return msg;
         }
+
     }
 
     public void tratarConexaoComCliente() throws InterruptedException, IOException {
 
         while (conexoes < 2) {
             conectarCliente();
-            
-           // rodarThreads();
+            synchronized (clienteAtual) {
+                clienteAtual.wait();
+            }
 
+            // rodarThreads();
             conexoes++;
-            
+
         }
-        
+
         //rodarThreads();
         clienteAtual = cliente1;
         clienteEmAguardo = cliente2;
-       
+
         //cliente1.wait();
         //clienteEmAguardo.notify();
     }
 
     public void chavearClientes() throws InterruptedException {
-       
+
         if (clienteAtual == cliente1) {
             clienteAtual = cliente2;
             clienteEmAguardo = cliente1;
-            
         } else {
             clienteAtual = cliente1;
             clienteEmAguardo = cliente2;
         }
-       
+
+    }
+
+    public void apropriarCliente() {
+        System.out.println(clienteAtual);
+
+        if (cliente1 == null) {
+            cliente1 = clienteAtual;
+            ThreadCLiente.setSignal(1);
+        } else {
+            cliente2 = clienteAtual;
+            ThreadCLiente.setSignal(2);
+        }
+    }
+
+    public void rodar() throws InterruptedException, IOException {
+        tratarConexaoComCliente();
+        synchronized (clienteEmAguardo) {
+            clienteEmAguardo.wait();
+        }
+        iniciarJogo();
+    }
+
+    public void rodarThreads() throws InterruptedException {
+        //cliente2.start();
     }
 
     public static void main(String[] args) throws IOException,

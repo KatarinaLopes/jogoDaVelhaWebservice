@@ -15,7 +15,8 @@ import jogodavelhaservidor.view.Apresentação;
  *
  * @author Katarina
  */
-public class ThreadCLiente extends Thread{
+public class ThreadCLiente extends Thread {
+
     private Socket cliente;
     private Apresentação apresentacao;
     private static int signal;
@@ -31,7 +32,7 @@ public class ThreadCLiente extends Thread{
 
     public void setCliente(Socket cliente) {
         this.cliente = cliente;
-    }   
+    }
 
     public static int getSignal() {
         return signal;
@@ -40,24 +41,28 @@ public class ThreadCLiente extends Thread{
     public static void setSignal(int sign) {
         signal = sign;
     }
-    
+
     @Override
-    public void run(){
-        apresentacao.selecionarNome();
-        
-        synchronized(this){
-            apresentacao.selecionarSimbolo();
+    public void run() {
+        synchronized (this) {
+
+            apresentacao.selecionarNome();
+
+            if (signal == 1) {
+                apresentacao.selecionarSimbolo();
+            } else {
+                apresentacao.anunciarSimboloOutroJogador();
+            }
+
             notify();
         }
-        
-        apresentacao.anunciarSimboloOutroJogador();
-            
+
     }
-    
-    public String jogar(){
-        
+
+    public String jogar() {
+
         String msg = apresentacao.iniciarJogo();
-        
+
         return msg;
     }
 }

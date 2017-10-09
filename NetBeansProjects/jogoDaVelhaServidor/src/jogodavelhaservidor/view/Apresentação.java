@@ -113,7 +113,7 @@ public class Apresentação {
             
         //}
         
-        return "";
+        return "#NEXT_PLAYER";
     }
     
     public void jogar() throws IOException{
