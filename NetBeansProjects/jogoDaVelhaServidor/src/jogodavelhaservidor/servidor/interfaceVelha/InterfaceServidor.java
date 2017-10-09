@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jogodavelhaservidor.servidor.Servidor;
 import jogodavelhaservidor.servidor.threads.ThreadCLiente;
-import jogodavelhaservidor.view.Apresentação;
+import jogodavelhaservidor.view.Apresentacao;
 
 /**
  *
@@ -25,7 +25,7 @@ public class InterfaceServidor {
     private ThreadCLiente cliente2;
     private ThreadCLiente clienteAtual;
     private ThreadCLiente clienteEmAguardo;
-    private Apresentação apresentacao;
+    private Apresentacao apresentacao;
 
     private int conexoes;
 
@@ -38,7 +38,7 @@ public class InterfaceServidor {
                     + "Erro: " + ex);
         }
 
-        apresentacao = new Apresentação();
+        apresentacao = new Apresentacao();
     }
 
     public void encerrarConexao() {

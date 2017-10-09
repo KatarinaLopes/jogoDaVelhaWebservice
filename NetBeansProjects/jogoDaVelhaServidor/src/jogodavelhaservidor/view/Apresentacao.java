@@ -18,14 +18,14 @@ import jogodavelhaservidor.controllers.ControllerJogo;
  *
  * @author Katarina
  */
-public class Apresentação {
+public class Apresentacao {
 
     private ControllerJogo controller = new ControllerJogo();
     private Scanner s;
     
     private PrintStream entrada;
     
-    public Apresentação() {
+    public Apresentacao() {
     }
 
     public Scanner getS() {

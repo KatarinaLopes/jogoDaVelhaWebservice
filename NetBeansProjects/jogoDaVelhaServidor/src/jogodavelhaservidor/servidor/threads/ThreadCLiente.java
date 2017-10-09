@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jogodavelhaservidor.servidor.Servidor;
-import jogodavelhaservidor.view.Apresentação;
+import jogodavelhaservidor.view.Apresentacao;
 
 /**
  *
@@ -18,10 +18,10 @@ import jogodavelhaservidor.view.Apresentação;
 public class ThreadCLiente extends Thread {
 
     private Socket cliente;
-    private Apresentação apresentacao;
+    private Apresentacao apresentacao;
     private static int signal;
 
-    public ThreadCLiente(Socket cliente, Apresentação apresentacao) {
+    public ThreadCLiente(Socket cliente, Apresentacao apresentacao) {
         this.cliente = cliente;
         this.apresentacao = apresentacao;
     }
