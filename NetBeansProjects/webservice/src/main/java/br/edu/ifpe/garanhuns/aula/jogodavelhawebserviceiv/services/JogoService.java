@@ -80,18 +80,8 @@ public class JogoService {
     @GET
     @Path("/fazer_jogada")
     public String fazerJogada(@QueryParam("idJogo") int idJogo,
-            @QueryParam("id1") int id1,
-            @QueryParam("casa1") int casa1,
-            @QueryParam("id2") int id2,
-            @QueryParam("casa2") int casa2) {
+            @QueryParam("casa1") int casa1) {
 
-        if (id1 == id2) {
-            return "Jogadores iguais!";
-        }
-
-        if (casa1 == casa2) {
-            return "Casas iguais!";
-        }
 
         Jogo jogo = (Jogo) daoJogo.recuperar(idJogo);
 
@@ -103,16 +93,10 @@ public class JogoService {
             return "Este jogo já foi concluído! Inicie outro!";
         }
 
-        Jogador j1 = jogo.getJogador1();
-        Jogador j2 = jogo.getJogador2();
-
-        if (j1 == null || j2 == null) {
-            return "Selecione as características do jogador primeiro!";
-        }
+        Jogador j = jogo.getJogadorAtual();
 
         try {
-            jogo.realizarJogada(casa1, j1);
-            jogo.realizarJogada(casa2, j2);
+            jogo.realizarJogada(casa1, j);
         } catch (JogoException e) {
             return e.getMessage();
         }
@@ -120,13 +104,11 @@ public class JogoService {
         String mensagem = "";
         
         
-        if (jogo.ganhou(j1)) {
-            mensagem = j1.getNome() + " venceu!";
-        } else if (jogo.ganhou(j2)) {
-            mensagem = j2.getNome() + " venceu!";
+        if (jogo.ganhou(j)) {
+            mensagem = j.getNome() + " venceu!";
         }
         
-        if (jogo.getTabuleiro().retornarTamanhoPreenchidoTabuleiro() == 8) {
+        if (jogo.getTabuleiro().estaCheio() && jogo.isGanhou() == false) {
             mensagem = "Velha!";
             jogo.setGanhou(true);
         }
