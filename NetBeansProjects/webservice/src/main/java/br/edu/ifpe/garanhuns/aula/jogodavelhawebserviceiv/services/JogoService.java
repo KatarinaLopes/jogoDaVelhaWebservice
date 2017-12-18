@@ -31,22 +31,22 @@ public class JogoService {
     private DaoGenerico daoJogador = new DaoJogador();
 
     @GET
-    @Path("/selecionar_nome")
+    @Path("/selecionar_configuracoes")
     public String selecionarNome(@QueryParam("nome1") String nome1,
             @QueryParam("nome2") String nome2,
             @QueryParam("simbolo1") String simbolo1,
             @QueryParam("simbolo2") String simbolo2) {
 
         if (!simbolo1.equals("X") && !simbolo1.equals("O")) {
-            return "Símbolo do primeiro jogador incorreto!";
+            return "Simbolo do primeiro jogador incorreto!";
         }
 
         if (!simbolo2.equals("X") && !simbolo2.equals("O")) {
-            return "Símbolo do segundo jogador incorreto!";
+            return "Simbolo do segundo jogador incorreto!";
         }
 
         if (simbolo1.equals(simbolo2)) {
-            return "Símbolos iguais!";
+            return "Simbolos iguais!";
         }
 
         int id1 = DaoJogador.retornarTamanhoDaLista() + 1;
@@ -64,12 +64,12 @@ public class JogoService {
 
         String mensagem = "ID do Jogador 1: " + j1.getId()
                 + "<br>Nome do Jogador 1: " + j1.getNome()
-                + "<br>--------------<br>Símbolo: " + j1.getSimbolo()
+                + "<br>--------------<br>Simbolo: " + j1.getSimbolo()
                 + "<br>--------------<br>ID do Jogador 2: " + j2.getId()
-                + "<br>Nome do Jogador 2: " + j2.getNome() + "<br>Símbolo: "
+                + "<br>Nome do Jogador 2: " + j2.getNome() + "<br>Simbolo: "
                 + j2.getSimbolo() + "<br>--------------<br>ID do jogo: "
                 + idJogo + "<br>--------------<br>" + j1.getNome() +
-                ", você começa!";
+                ", voce comeca!";
 
         return mensagem;
     }
@@ -83,16 +83,16 @@ public class JogoService {
     @GET
     @Path("/fazer_jogada")
     public String fazerJogada(@QueryParam("idJogo") int idJogo,
-            @QueryParam("casa1") int casa1) {
+            @QueryParam("casa") int casa1) {
 
         Jogo jogo = (Jogo) daoJogo.recuperar(idJogo);
 
         if (jogo == null) {
-            return "Id de jogo inválido";
+            return "Id de jogo invalido";
         }
 
         if (jogo.isGanhou() == true) {
-            return "Este jogo já foi concluído! Inicie outro!";
+            return "Este jogo ja foi concluido! Inicie outro!";
         }
 
         Jogador j = jogo.getJogadorAtual();
@@ -114,7 +114,8 @@ public class JogoService {
             jogo.setGanhou(true);
         }
 
-        //Nunca vai alcançar, porque o jogo recebe dois parâmetros
+        //Nunca vai alcançar, porque o jogo recebe dois parâmetros - 
+        //desconsiderar comentário!
         daoJogo.atualizar(jogo);
 
         jogo = (Jogo) daoJogo.recuperar(idJogo);
