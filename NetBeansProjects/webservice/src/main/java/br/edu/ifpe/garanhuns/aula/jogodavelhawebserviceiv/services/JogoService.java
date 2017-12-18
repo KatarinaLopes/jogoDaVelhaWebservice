@@ -62,13 +62,14 @@ public class JogoService {
         int idJogo = DaoJogo.retornarTamanhoDaLista() + 1;
         daoJogo.cadastrar(new Jogo(idJogo, j1, j2, new Tabuleiro(0)));
 
-        String mensagem = "ID do Jogador 1: " + j1.getId() + 
-                "<br>Nome do Jogador 1: " + j1.getNome() + 
-                "<br>--------------<br>Símbolo: " + j1.getSimbolo()
+        String mensagem = "ID do Jogador 1: " + j1.getId()
+                + "<br>Nome do Jogador 1: " + j1.getNome()
+                + "<br>--------------<br>Símbolo: " + j1.getSimbolo()
                 + "<br>--------------<br>ID do Jogador 2: " + j2.getId()
                 + "<br>Nome do Jogador 2: " + j2.getNome() + "<br>Símbolo: "
-                + j2.getSimbolo() + "<br>--------------<br>ID do jogo: " + 
-                idJogo;;
+                + j2.getSimbolo() + "<br>--------------<br>ID do jogo: "
+                + idJogo + "<br>--------------<br>" + j1.getNome() +
+                ", você começa!";
 
         return mensagem;
     }
@@ -84,7 +85,6 @@ public class JogoService {
     public String fazerJogada(@QueryParam("idJogo") int idJogo,
             @QueryParam("casa1") int casa1) {
 
-
         Jogo jogo = (Jogo) daoJogo.recuperar(idJogo);
 
         if (jogo == null) {
@@ -96,20 +96,19 @@ public class JogoService {
         }
 
         Jogador j = jogo.getJogadorAtual();
-
+        
         try {
             jogo.realizarJogada(casa1, j);
         } catch (JogoException e) {
             return e.getMessage();
         }
         
-        String mensagem = "";
-        
+        String mensagem = "Vez de " + jogo.getJogadorAtual().getNome();
         
         if (jogo.ganhou(j)) {
             mensagem = j.getNome() + " venceu!";
         }
-        
+
         if (jogo.getTabuleiro().estaCheio() && jogo.isGanhou() == false) {
             mensagem = "Velha!";
             jogo.setGanhou(true);
@@ -120,8 +119,7 @@ public class JogoService {
 
         jogo = (Jogo) daoJogo.recuperar(idJogo);
 
-        mensagem += "Vez de " + jogo.getJogadorAtual().getNome() + "<br>" + 
-                jogo.imprimirEstadoTabuleiro();
+        mensagem += "<br>" + jogo.imprimirEstadoTabuleiro();
 
         return mensagem;
     }

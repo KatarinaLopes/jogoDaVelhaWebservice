@@ -18,7 +18,7 @@ public class Jogo {
     private Jogador jogador1;
     private Jogador jogador2;
     private Tabuleiro tabuleiro;
-    private int vez;
+    private int vez = 0;
     private Jogador jogadorAtual;
     private boolean ganhou = false;
 
@@ -107,7 +107,7 @@ public class Jogo {
         tabuleiro.setarPecaNoQuadro(casa, j.getSimbolo());
         j.setJogadas();
 
-        System.out.println(vez);
+        System.out.println(vez + " s");
         
         alternarVez();
         
