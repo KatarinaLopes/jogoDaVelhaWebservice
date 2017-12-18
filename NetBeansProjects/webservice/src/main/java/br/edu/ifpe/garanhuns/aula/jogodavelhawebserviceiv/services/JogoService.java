@@ -62,11 +62,13 @@ public class JogoService {
         int idJogo = DaoJogo.retornarTamanhoDaLista() + 1;
         daoJogo.cadastrar(new Jogo(idJogo, j1, j2, new Tabuleiro(0)));
 
-        String mensagem = "ID do Jogador 1: " + id1 + "<br>Nome do Jogador 1: "
-                + nome1 + "<br>--------------<br>Símbolo: " + simbolo1
-                + "<br>--------------<br>ID do Jogador 2: " + id2
-                + "<br>Nome do Jogador 2: " + nome2 + "<br>Símbolo: "
-                + simbolo2 + "<br>--------------<br>ID do jogo: " + idJogo;;
+        String mensagem = "ID do Jogador 1: " + j1.getId() + 
+                "<br>Nome do Jogador 1: " + j1.getNome() + 
+                "<br>--------------<br>Símbolo: " + j1.getSimbolo()
+                + "<br>--------------<br>ID do Jogador 2: " + j2.getId()
+                + "<br>Nome do Jogador 2: " + j2.getNome() + "<br>Símbolo: "
+                + j2.getSimbolo() + "<br>--------------<br>ID do jogo: " + 
+                idJogo;;
 
         return mensagem;
     }
@@ -118,7 +120,8 @@ public class JogoService {
 
         jogo = (Jogo) daoJogo.recuperar(idJogo);
 
-        mensagem += "<br>" + jogo.imprimirEstadoTabuleiro();
+        mensagem += "Vez de " + jogo.getJogadorAtual().getNome() + "<br>" + 
+                jogo.imprimirEstadoTabuleiro();
 
         return mensagem;
     }
