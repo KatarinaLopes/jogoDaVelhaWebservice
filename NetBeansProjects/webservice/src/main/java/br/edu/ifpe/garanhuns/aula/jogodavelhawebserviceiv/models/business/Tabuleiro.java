@@ -60,6 +60,20 @@ public class Tabuleiro {
         return true;
     }
     
+    public int retornarTamanhoPreenchidoTabuleiro(){
+        int pecas = 0;
+        
+        for (Peca[] pecas1 : quadro) {
+            for (Peca peca : pecas1) {
+                if(!peca.getSimbolo().isEmpty()){
+                    pecas++;
+                }
+            }
+        }
+        
+        return pecas;
+    }
+    
     /**
      * Verifica se o espaço passada como parâmetro já está selecionada
      * <i>Verifies if the space given as parameter is already selected</i>
