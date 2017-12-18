@@ -128,6 +128,7 @@ public class JogoService {
         
         if (jogo.getTabuleiro().retornarTamanhoPreenchidoTabuleiro() == 8) {
             mensagem = "Velha!";
+            jogo.setGanhou(true);
         }
 
         //Nunca vai alcançar, porque o jogo recebe dois parâmetros
